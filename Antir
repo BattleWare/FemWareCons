@@ -1,0 +1,35 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local jumping = false
+
+local function clothesRemoved()
+    local char = player.Character
+    if not char then return false end
+    
+    local shirt = char:FindFirstChildOfClass("Shirt")
+    local pants = char:FindFirstChildOfClass("Pants")
+    
+    return (not shirt) and (not pants)
+end
+
+task.spawn(function()
+    while true do
+        local char = player.Character
+        if char then
+            local hum = char:FindFirstChildOfClass("Humanoid")
+            
+            if clothesRemoved() then
+                jumping = true
+            else
+                jumping = false
+            end
+            
+            if jumping and hum then
+                hum:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
+        end
+        
+        task.wait(0.01)
+    end
+end)
